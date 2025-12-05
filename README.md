@@ -7,6 +7,7 @@ Hangman TOEIC is an English vocabulary training Hangman game. This version uses 
 ## 🚀 Features
 
 ✔ Fetch random words from SQLite database
+
 ✔ Full Hangman drawing system using Canvas
 
 ---
