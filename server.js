@@ -6,10 +6,10 @@ const app = express();
 const DB_FILE = fsExistsSync = require('fs').existsSync('hangman.db') ? 'hangman.db' : 'words.db';
 const db = new Database(DB_FILE);
 
-// ให้ Express เปิดหน้าเว็บจากโฟลเดอร์ public
+// Serve static files from the "public" folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-// API: ดึงคำแบบสุ่ม
+// random word API
 app.get('/api/random-word', (req, res) => {
     try {
         const row = db.prepare("SELECT word FROM words ORDER BY RANDOM() LIMIT 1").get();
@@ -19,7 +19,7 @@ app.get('/api/random-word', (req, res) => {
     }
 });
 
-// API: คืนรายการคำทั้งหมด (JSON array)
+// all words API
 app.get('/api/words', (req, res) => {
     try {
         const rows = db.prepare('SELECT word FROM words').all();

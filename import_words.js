@@ -1,6 +1,6 @@
 // import_words.js
 const Database = require('better-sqlite3');
-const words = require('./wordList.js'); // ใช้ไฟล์ของคุณ
+const words = require('./wordList.js'); 
 
 // create DB
 const db = new Database('hangman.db');
