@@ -145,4 +145,4 @@ MIT License – free to use and modify.
 
 ## ✨ Developer
 
-**Punchaya Chancharoen
+**Punchaya Chancharoen**
