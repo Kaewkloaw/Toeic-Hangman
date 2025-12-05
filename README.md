@@ -1,6 +1,6 @@
-# Hangman TOEIC Pro (SQLite Version)
+# Hangman TOEIC 
 
-Hangman TOEIC Pro is an English vocabulary training Hangman game. This version uses an **SQLite database** to store all vocabulary words, allowing you to easily add and manage words through both the API and the frontend UI.
+Hangman TOEIC is an English vocabulary training Hangman game. This version uses an **SQLite database** to store all vocabulary words, allowing you to easily add and manage words through both the API and the frontend UI.
 
 ---
 
