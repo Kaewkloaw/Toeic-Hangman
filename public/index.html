@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangman TOEIC Edition (API)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+<body class="bg-slate-900 text-white min-h-screen flex flex-col items-center justify-center p-4">
+
+    <header class="text-center mb-6">
+        <h1 class="text-4xl md:text-5xl font-bold text-indigo-400 mb-2">HANGMAN <span class="text-sm bg-indigo-600 text-white px-2 py-1 rounded-md align-middle">toeic</span></h1>
+        <p class="text-slate-400">created by Kaewkloaw Punchaya Chancharoen </p>
+    </header>
+
+    <!-- Inline banner for API/DB errors (hidden by default) -->
+    <div id="apiBanner" class="hidden mb-4 max-w-4xl w-full flex justify-center">
+        <div class="bg-yellow-400 text-slate-900 px-4 py-2 rounded-md w-full flex items-center justify-between">
+            <div id="apiBannerText" class="text-sm"></div>
+            <button id="apiBannerClose" class="ml-4 text-sm underline">ปิด</button>
+        </div>
+    </div>
+
+    <div class="bg-slate-800 p-6 rounded-2xl shadow-2xl w-full max-w-4xl flex flex-col md:flex-row gap-8 items-center justify-center relative">
+        
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="absolute inset-0 bg-slate-800/90 z-10 flex flex-col items-center justify-center rounded-2xl hidden">
+            <div class="loader mb-4"></div>
+            <p class="text-indigo-300 animate-pulse">กำลังดาวน์โหลดคำศัพท์...</p>
+        </div>
+
+        <!-- Canvas -->
+        <div class="flex flex-col items-center">
+            <canvas id="hangmanCanvas" width="250" height="300" class="bg-slate-100 rounded-lg shadow-inner border-4 border-slate-700"></canvas>
+            <p class="mt-4 text-xl font-semibold text-red-400">ผิดพลาด: <span id="mistakes">0</span> / 6</p>
+        </div>
+
+        <!-- Gameplay Area -->
+        <div class="flex-1 w-full flex flex-col items-center">
+            <div id="wordSpotlight" class="flex flex-wrap justify-center mb-8 text-3xl md:text-4xl font-bold tracking-wider py-4 min-h-[80px]"></div>
+            <div id="gameStatus" class="mb-4 text-2xl font-bold h-8 text-center"></div>
+            <div id="keyboard" class="grid grid-cols-7 gap-2 md:gap-3 w-full max-w-lg mb-6"></div>
+            
+            <button onclick="resetGame()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2 px-8 rounded-full shadow-lg transition transform hover:scale-105 active:scale-95 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                คำศัพท์ถัดไป
+            </button>
+        </div>
+    </div>
+
+    <footer class="mt-8 text-slate-500 text-sm">
+        Powered by Datamuse API
+    </footer>
+
+    <script>
+        // --- API Settings ---
+        
+        // Backup words 
+        const backupWords = [
+            "AGREEMENT", "BUDGET", "CONTRACT", "DEADLINE", "EXECUTIVE", 
+            "FEEDBACK", "GROWTH", "HIRE", "INCOME", "JOB"
+        ];
+
+        let words = []; // words fetched from API or DB
+        let answer = '';
+        let maxWrong = 6;
+        let mistakes = 0;
+        let guessed = [];
+        let wordStatus = null;
+
+        // API (Asynchronous)
+        async function fetchWords() {
+            showLoading(true);
+                try {
+                    // Fetch words from local server endpoint (served from hangman.db)
+                    const response = await fetch('/api/words');
+                    if (!response.ok) throw new Error('Network response was not ok');
+
+                    const data = await response.json();
+
+                    // If the server returned an array of strings (words), use them
+                    if (Array.isArray(data) && data.length > 0) {
+                        const filteredData = data
+                            .map(w => String(w).toUpperCase())
+                            .filter(word => word.length > 4 && /^[A-Z]+$/.test(word));
+
+                        if (filteredData.length > 0) {
+                            words = filteredData;
+                            console.log("Loaded " + words.length + " words from local DB");
+                        } else {
+                            throw new Error('No valid words found in DB');
+                        }
+                    } else {
+                        throw new Error('Invalid response from server');
+                    }
+                } catch (error) {
+                    console.error("DB/API Error, using backup words:", error);
+                    words = backupWords; 
+                    // show inline banner (non-blocking)
+                    const banner = document.getElementById('apiBanner');
+                    const bannerText = document.getElementById('apiBannerText');
+                    if (banner && bannerText) {
+                        bannerText.textContent = 'ไม่สามารถเชื่อมต่อฐานข้อมูลคำศัพท์ภายในเครื่อง — ใช้คำสำรองแทน';
+                        banner.classList.remove('hidden');
+                    } else {
+                        alert('ไม่สามารถเชื่อมต่อฐานข้อมูลคำศัพท์ — ใช้คำสำรองแทน');
+                    }
+                } finally {
+                    showLoading(false);
+                    playRound();
+                }
+        }
+
+        function showLoading(isLoading) {
+            const overlay = document.getElementById('loadingOverlay');
+            if (isLoading) overlay.classList.remove('hidden');
+            else overlay.classList.add('hidden');
+        }
+
+        // --- Canvas & Graphics ---
+        const canvas = document.getElementById('hangmanCanvas');
+        const ctx = canvas ? canvas.getContext('2d') : null;
+
+        function clearCanvas() {
+            if (!ctx) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawGallows();
+        }
+
+        function drawLine(fromX, fromY, toX, toY) {
+            if (!ctx) return;
+            ctx.beginPath();
+            ctx.moveTo(fromX, fromY);
+            ctx.lineTo(toX, toY);
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = "#1e293b";
+            ctx.lineCap = "round";
+            ctx.stroke();
+        }
+
+        function drawCircle(x, y, r) {
+            if (!ctx) return;
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, Math.PI * 2, true);
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = "#1e293b";
+            ctx.stroke();
+        }
+
+        function drawGallows() {
+            drawLine(20, 270, 230, 270);
+            drawLine(50, 270, 50, 30);
+            drawLine(50, 30, 150, 30);
+            drawLine(150, 30, 150, 50);
+        }
+
+        function drawHangman(step) {
+            switch(step) {
+                case 1: drawCircle(150, 75, 25); break;
+                case 2: drawLine(150, 100, 150, 190); break;
+                case 3: drawLine(150, 120, 110, 150); break;
+                case 4: drawLine(150, 120, 190, 150); break;
+                case 5: drawLine(150, 190, 110, 230); break;
+                case 6: drawLine(150, 190, 190, 230); break;
+            }
+        }
+
+        // --- Game Logic ---
+
+        function randomWord() {
+            // สุ่มจากรายการคำศัพท์ที่เราดึงมา
+            answer = words[Math.floor(Math.random() * words.length)];
+        }
+
+        function generateButtons() {
+            let buttonsHTML = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map(letter =>
+                `<button
+                    class="letter-btn bg-white text-indigo-700 font-bold py-2 rounded shadow-md hover:bg-indigo-100 transition active:translate-y-1 text-lg"
+                    id='${letter}'
+                    onClick="handleGuess('${letter}')"
+                >
+                    ${letter}
+                </button>`
+            ).join('');
+            document.getElementById('keyboard').innerHTML = buttonsHTML;
+        }
+
+        function handleGuess(chosenLetter) {
+            if (guessed.indexOf(chosenLetter) !== -1 || mistakes === maxWrong) return;
+
+            guessed.push(chosenLetter);
+            const btn = document.getElementById(chosenLetter);
+            if (btn) btn.setAttribute('disabled', true);
+
+            if (answer.indexOf(chosenLetter) >= 0) {
+                guessWord();
+                checkIfGameWon();
+            } else {
+                mistakes++;
+                updateMistakes();
+                drawHangman(mistakes);
+                checkIfGameLost();
+            }
+        }
+
+        function guessWord() {
+            wordStatus = answer.split('').map(letter => (guessed.indexOf(letter) >= 0 ? letter : "&nbsp;")).join('</u><u class="word-slot">');
+            document.getElementById('wordSpotlight').innerHTML = '<u class="word-slot">' + wordStatus + '</u>';
+        }
+
+        function updateMistakes() {
+            document.getElementById('mistakes').innerHTML = mistakes;
+        }
+
+        function checkIfGameWon() {
+            const currentWordState = document.getElementById('wordSpotlight').innerText.replace(/\s/g, ''); 
+            if (currentWordState === answer) {
+                document.getElementById('gameStatus').innerHTML = '<span class="text-green-400">🎉 Correct! (' + answer + ')</span>';
+                document.getElementById('keyboard').innerHTML = ''; 
+            }
+        }
+
+        function checkIfGameLost() {
+            if (mistakes === maxWrong) {
+                document.getElementById('wordSpotlight').innerHTML = '<span class="text-red-300 text-2xl">เฉลย: ' + answer + '</span>';
+                document.getElementById('gameStatus').innerHTML = '<span class="text-red-500">💀 Game Over</span>';
+                document.getElementById('keyboard').innerHTML = '';
+            }
+        }
+
+        function playRound() {
+            mistakes = 0;
+            guessed = [];
+            document.getElementById('gameStatus').innerHTML = '';
+            
+            randomWord();
+            guessWord();
+            updateMistakes();
+            generateButtons();
+            clearCanvas();
+        }
+
+        function resetGame() {
+            if (words.length === 0) {
+                fetchWords();
+            } else {
+                playRound();
+            }
+        }
+
+        // Keyboard Support
+        document.addEventListener('keydown', (event) => {
+            const letter = event.key.toUpperCase();
+            if (event.keyCode >= 65 && event.keyCode <= 90 && mistakes < maxWrong) {
+                 const btn = document.getElementById(letter);
+                 if (btn && !btn.disabled) handleGuess(letter);
+            }
+        });
+
+        // Start
+        window.onload = function() {
+            fetchWords(); 
+        };
+
+        // banner close handler
+        document.addEventListener('click', (e) => {
+            if (e.target && e.target.id === 'apiBannerClose') {
+                const banner = document.getElementById('apiBanner');
+                if (banner) banner.classList.add('hidden');
+            }
+        });
+
+    </script>
+</body>
+</html>
