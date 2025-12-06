@@ -3,6 +3,8 @@
 Hangman TOEIC is an English vocabulary training Hangman game. This version uses an **SQLite database** to store all vocabulary words, allowing you to easily add and manage words through both the API and the frontend UI.
 
 ---
+<img width="2878" height="1499" alt="image" src="https://github.com/user-attachments/assets/244149b3-6965-4f56-b7f5-923225194b84" />
+
 
 ## 🚀 Features
 
