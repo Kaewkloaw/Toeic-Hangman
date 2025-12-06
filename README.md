@@ -28,7 +28,6 @@ Hangman TOEIC is an English vocabulary training Hangman game. This version uses 
  ┣ 📜 README.md
  ┣ 📜 server.js
  ┗ 📜 wordList.js
-
 ```
 
 ---
