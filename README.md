@@ -15,13 +15,20 @@ Hangman TOEIC is an English vocabulary training Hangman game. This version uses 
 ## 📂 Project Structure
 
 ```
-Hangman_Toeic/
-│── public/
-│   └── index.html        # Main frontend connected to SQLite
-│── server.js             # Backend server + API routes
-│── words.db              # SQLite database file
-│── import_words.js       # Script for importing initial vocabulary (optional)
-│── README.md             # Documentation
+📦 Hangman_Toeic
+ ┣ 📂 public
+ ┃ ┣ 📜 index.html
+ ┃ ┣ 📜 script.js
+ ┃ ┗ 📜 style.css
+ ┣ 📜 get_random_word.js
+ ┣ 📜 hangman.db
+ ┣ 📜 import_words.js
+ ┣ 📜 package-lock.json
+ ┣ 📜 package.json
+ ┣ 📜 README.md
+ ┣ 📜 server.js
+ ┗ 📜 wordList.js
+
 ```
 
 ---
