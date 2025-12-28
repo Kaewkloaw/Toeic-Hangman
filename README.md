@@ -74,9 +74,9 @@ CREATE TABLE IF NOT EXISTS words (
 
 ---
 
-## 🔌 API Endpoints
+## API Endpoints
 
-### ▶ 1. Get a random word
+### 1. Get a random word
 
 ```
 GET /api/random
@@ -90,7 +90,7 @@ GET /api/random
 }
 ```
 
-### ▶ 2. Add a new word
+### 2. Add a new word
 
 ```
 POST /api/add
