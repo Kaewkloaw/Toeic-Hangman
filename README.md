@@ -130,23 +130,3 @@ You can also add new words directly through the input panel at the top of the pa
 * Node.js 16+
 * SQLite (built-in via `sqlite3` module)
 * Modern browser with Canvas support
-
----
-
-## ❤️ Credits
-
-* UI/UX built with TailwindCSS
-* Hangman drawing created using Canvas API
-* Random word/data storage powered by SQLite + Express API
-
----
-
-## 📜 License
-
-MIT License – free to use and modify.
-
----
-
-## ✨ Developer
-
-**Punchaya Chancharoen**
