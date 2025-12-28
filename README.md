@@ -5,7 +5,7 @@ Hangman TOEIC is an English vocabulary training Hangman game. This version uses 
 ---
 <img width="2879" height="1506" alt="image" src="https://github.com/user-attachments/assets/a32fa128-3a2b-4317-9ecf-b31d99d135be" />
 
-## 🚀 Features
+## Features
 
 ✔ Fetch random words from SQLite database
 
@@ -13,27 +13,27 @@ Hangman TOEIC is an English vocabulary training Hangman game. This version uses 
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
-📦 Hangman_Toeic
- ┣ 📂 public
- ┃ ┣ 📜 index.html
- ┃ ┣ 📜 script.js
- ┃ ┗ 📜 style.css
- ┣ 📜 get_random_word.js
- ┣ 📜 hangman.db
- ┣ 📜 import_words.js
- ┣ 📜 package-lock.json
- ┣ 📜 package.json
- ┣ 📜 README.md
- ┣ 📜 server.js
- ┗ 📜 wordList.js
+Hangman_Toeic
+ ┣ public
+ ┃ ┣ index.html
+ ┃ ┣ script.js
+ ┃ ┗ style.css
+ ┣ get_random_word.js
+ ┣ hangman.db
+ ┣ import_words.js
+ ┣ package-lock.json
+ ┣ package.json
+ ┣ README.md
+ ┣ server.js
+ ┗ wordList.js
 ```
 
 ---
 
-## 🔧 Installation & Setup
+## Installation & Setup
 
 ### 1) Install dependencies
 
@@ -112,7 +112,7 @@ POST /api/add
 
 ---
 
-## 🎮 How To Play
+## How To Play
 
 1. The webpage loads a vocabulary word from the SQLite database.
 2. The system masks the word and creates blank letter slots.
@@ -125,7 +125,7 @@ You can also add new words directly through the input panel at the top of the pa
 
 ---
 
-## 📦 Requirements
+## Requirements
 
 * Node.js 16+
 * SQLite (built-in via `sqlite3` module)
