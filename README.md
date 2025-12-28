@@ -61,7 +61,7 @@ http://localhost:3000/index.html
 
 ---
 
-## 🗄 SQLite Database Structure
+## SQLite Database Structure
 
 The table is automatically created when `server.js` is started:
 
