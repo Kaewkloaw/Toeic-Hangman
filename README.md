@@ -1,131 +1,67 @@
-# Hangman TOEIC 
+<div align="center">
+  <h1> Toeic Hangman </h1>
+  <img src="https://readme-typing-svg.herokuapp.com/?lines=Welcome+to+Hangman+TOEIC!;🌷+Master+English+Vocabulary;✨+Learn+with+Fun+and+Hard&center=true&width=500&height=45&color=F48FB1">
+  <p align="center">🌼 An interactive English vocabulary training game powered by SQLite and Node.js. 💐</p>
+ 
+  ![Node.js](https://img.shields.io/badge/Node.js-EC407A?style=for-the-badge&logo=nodedotjs&logoColor=white)
+  ![Express](https://img.shields.io/badge/Express-F06292?style=for-the-badge&logo=express&logoColor=white)
+  ![SQLite](https://img.shields.io/badge/SQLite-F48FB1?style=for-the-badge&logo=sqlite&logoColor=white)
+  ![JavaScript](https://img.shields.io/badge/JavaScript-F8BBD0?style=for-the-badge&logo=javascript&logoColor=white)
+  ![HTML5](https://img.shields.io/badge/HTML5-F6BDC0?style=for-the-badge&logo=html5&logoColor=white)
+</div>
 
-Hangman TOEIC is an English vocabulary training Hangman game. This version uses an **SQLite database** to store all vocabulary words, allowing you to easily add and manage words through both the API and the frontend UI.
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/a32fa128-3a2b-4317-9ecf-b31d99d135be" width="80%" alt="Hangman Game Preview">
+</div>
 
----
-<img width="2879" height="1506" alt="image" src="https://github.com/user-attachments/assets/a32fa128-3a2b-4317-9ecf-b31d99d135be" />
+## 📄 Project Description
+<p style="text-align: justify; line-height: 1.6;">
+  <strong>Hangman TOEIC</strong> is an engaging educational web application designed to help users practice English vocabulary for the TOEIC exam. Unlike static games, this project features a dynamic <strong>SQLite database</strong> backend that stores an expanding library of words. Users can play the classic Hangman game with a smooth <strong>Canvas-based drawing system</strong> and even contribute new vocabulary words directly through the UI or API. It's the perfect blend of fun, learning, and backend technology! 🌸
+</p>
 
-## Features
+## ✨ Key Features
+* 🌸 **Dynamic Word Fetching:** Retrieves random vocabulary words instantly from the local SQLite database.
+* 🌷 **Interactive Gameplay:** Full Hangman drawing system rendered in real-time using the HTML5 Canvas API.
+* 🌺 **Word Management:** Easy-to-use interface and API for adding new words to the database.
+* 💐 **Simple API Architecture:** Built with Express.js to handle word retrieval and database updates efficiently.
 
-- Fetch random words from SQLite database
-- Full Hangman drawing system using Canvas
+## 📡 API Reference
 
----
+| Endpoint | Method | Description | Example Body |
+| :--- | :---: | :--- | :--- |
+| `/api/random` | **GET** | Fetch a random word | N/A |
+| `/api/add` | **POST** | Add a new word | `{ "word": "BUDGET" }` |
 
-## Project Structure
+## 🚀 Getting Started
 
-```
-Hangman_Toeic
- ┣ public
- ┃ ┣ index.html
- ┃ ┣ script.js
- ┃ ┗ style.css
- ┣ get_random_word.js
- ┣ hangman.db
- ┣ import_words.js
- ┣ package-lock.json
- ┣ package.json
- ┣ README.md
- ┣ server.js
- ┗ wordList.js
-```
+### 🍃 Prerequisites
+* **Node.js** (Version 16 or higher)
+* **Web Browser** (Modern browser with Canvas support)
 
----
+### 🌱 Installation
+1.  **Clone the repository:**
+    ```bash
+    git clone [https://github.com/Kaewkloaw/Toeic-Hangman.git](https://github.com/Kaewkloaw/Toeic-Hangman.git)
+    ```
+2.  **Navigate to the project:**
+    ```bash
+    cd Toeic-Hangman
+    ```
+3.  **Install dependencies:**
+    ```bash
+    npm install express sqlite3 cors
+    ```
+4.  **Run the server:**
+    ```bash
+    node server.js
+    ```
+5.  **Start playing:**
+    Open your browser and visit: `http://localhost:3000/index.html`
 
-## Installation & Setup
-
-### 1) Install dependencies
-
-```bash
-npm install express sqlite3 cors
-```
-
-### 2) Run the server
-
-```bash
-node server.js
-```
-
-The server will start at:
-
-```
-http://localhost:3000
-```
-
-Open the game at:
-
-```
-http://localhost:3000/index.html
-```
-
----
-
-## SQLite Database Structure
-
-The table is automatically created when `server.js` is started:
-
-```
+### 🌺 Database Structure
+The system automatically creates a `hangman.db` file with the following schema:
+```sql
 CREATE TABLE IF NOT EXISTS words (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     word TEXT UNIQUE
 );
-```
-
----
-
-## API Endpoints
-
-### 1. Get a random word
-
-```
-GET /api/random
-```
-
-**Response:**
-
-```json
-{
-  "word": "AGREEMENT"
-}
-```
-
-### 2. Add a new word
-
-```
-POST /api/add
-```
-
-**Body JSON:**
-
-```json
-{
-  "word": "BUDGET"
-}
-```
-
-**Response:**
-
-```json
-{ "message": "Word added successfully" }
-```
-
----
-
-## How To Play
-
-1. The webpage loads a vocabulary word from the SQLite database.
-2. The system masks the word and creates blank letter slots.
-3. The player guesses alphabet letters A–Z.
-4. A wrong guess draws another part of the Hangman.
-5. 6 mistakes = Game Over.
-6. Press **New Word** to start again.
-
-You can also add new words directly through the input panel at the top of the page.
-
----
-
-## Requirements
-
-* Node.js 16+
-* SQLite (built-in via `sqlite3` module)
-* Modern browser with Canvas support
