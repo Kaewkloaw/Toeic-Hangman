@@ -6,8 +6,9 @@
   ![Node.js](https://img.shields.io/badge/Node.js-EC407A?style=for-the-badge&logo=nodedotjs&logoColor=white)
   ![Express](https://img.shields.io/badge/Express-F06292?style=for-the-badge&logo=express&logoColor=white)
   ![SQLite](https://img.shields.io/badge/SQLite-F48FB1?style=for-the-badge&logo=sqlite&logoColor=white)
-  ![JavaScript](https://img.shields.io/badge/JavaScript-F8BBD0?style=for-the-badge&logo=javascript&logoColor=white)
   ![HTML5](https://img.shields.io/badge/HTML5-F6BDC0?style=for-the-badge&logo=html5&logoColor=white)
+  ![CSS3](https://img.shields.io/badge/CSS3-F06292?style=for-the-badge&logo=css3&logoColor=white)
+  ![JavaScript](https://img.shields.io/badge/JavaScript-F8BBD0?style=for-the-badge&logo=javascript&logoColor=white)
 </div>
 
 <div align="center">
