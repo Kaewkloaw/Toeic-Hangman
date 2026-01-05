@@ -1,5 +1,5 @@
 <div align="center">
-  <h1> Toeic Hangman </h1>
+  <h1> TOEIC Hangman </h1>
   <img src="https://readme-typing-svg.herokuapp.com/?lines=Welcome+to+Hangman+TOEIC!;🌷+Master+English+Vocabulary;✨+Learn+with+Fun+and+Hard&center=true&width=500&height=45&color=F48FB1">
   <p align="center">🌼 An interactive English vocabulary training game powered by SQLite and Node.js. 💐</p>
  
